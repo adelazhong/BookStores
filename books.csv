@@ -1,0 +1,11 @@
+Id,BookId,BookName,Publisher,StoreName,Bookshelf,Stock
+1,00000001,A story of A,Xinhua,LinKou,A1,17
+2,00000001,A story of A,Xinhua,XinYi,A2,21
+3,00000001,A story of B,CP,SongYan,C3,10
+4,00000004,A story of B,CP,XiMen,C4,3
+5,00000005,A story of B,CP,WuChang,B2,8
+6,00000006,A story of B,CP,Taipei Station,D4,9
+7,00000007,Love,Xinhua,SongYan,D5,10
+8,00000008,Love,Xinhua,Taipei Station,F3,23
+9,00000009,Love,Xinhua,WuChang,A4,4
+10,00000010,Love,Xinhua,XiMen,C3,9

@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Analysis</title>
+		<script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script> 
+        <!-- 包括所有bootstrap的js插件或者可以根据需要使用的js插件调用　-->
+        <link href="http://cdn.bootcss.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">  
+		<script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <style>
+
+        .axis .domain {
+          display: none;
+        }
+
+        </style>
+
+        <script type="text/javascript">
+
+			var data=[
+				{"RecordId":"1","BookId":"45921763","BookName":"A companion to American indie film","Publisher":"Xinhua","Author":"Karen","Classificaiton":"Film","StoreName":"SongYan","SaleStatus":"No this Book"},
+				{"RecordId":"2","BookId":"51442190","BookName":"Macbeth","Publisher":"Xinhua","Author":"Shakespeare","Classificaiton":"literature","StoreName":"SongYan","Shelf":"C1","SaleStatus":"Replenishment"},
+				{"RecordId":"3","BookId":"95432780","BookName":"King Lear","Publisher":"Xinhua","Author":"Shakespeare","Classificaiton":"literature","StoreName":"SongYan","Shelf":"A2","SaleStatus":"On Sales"},
+				{"RecordId":"4","BookId":"10000001","BookName":"Romeo and Juliet","Publisher":"Xinhua","Author":"Shakespeare","Classificaiton":"literature","StoreName":"SongYan","Shelf":"D3","SaleStatus":"On Sales"},
+				{"RecordId":"5","BookId":"35793516","BookName":"Hamlet","Publisher":"Xinhua","Author":"Shakespeare","Classificaiton":"literature","StoreName":"SongYan","Shelf":"C4","SaleStatus":"Reservation"},
+				{"RecordId":"6","BookId":"15479376","BookName":"Othello","Publisher":"Xinhua","Author":"Shakespeare","Classificaiton":"literature","StoreName":"SongYan","Shelf":"B5","SaleStatus":"Replenishment"},
+				{"RecordId":"7","BookId":"15479376","BookName":"Othello","Publisher":"Xinhua","Author":"Shakespeare","Classificaiton":"literature","StoreName":"SongYan","Shelf":"A2","SaleStatus":"Replenishment"},
+				{"RecordId":"8","BookId":"15479376","BookName":"Othello","Publisher":"Xinhua","Author":"Shakespeare","Classificaiton":"literature","StoreName":"SongYan","Shelf":"C2","SaleStatus":"Replenishment"},
+				{"RecordId":"9","BookId":"15479376","BookName":"Othello","Publisher":"Xinhua","Author":"Shakespeare","Classificaiton":"literature","StoreName":"SongYan","Shelf":"D2","SaleStatus":"Replenishment"},
+				{"RecordId":"10","BookId":"15479376","BookName":"Othello","Publisher":"Xinhua","Author":"Shakespeare","Classificaiton":"literature","StoreName":"SongYan","Shelf":"A1","SaleStatus":"Replenishment"}
+
+			];
+			var statusNum=["On Sales","Replenishment","Reservation","No this Book"];
+
+			
+
+			</script>
+			<style>
+			body {
+			  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+			  margin: auto;
+			
+			  position: relative;
+			  /*width: 100%;*/
+			}
+			table{
+			  width:60%;
+			  margin-left:auto; 
+			  margin-right:auto;
+			}
+			td{width:50%;}
+			.bulleT { font: 10px sans-serif; margin-left:auto;margin-right:auto;}
+			.bulleT .marker { stroke: #4D4D4D; stroke-width: 2px;}
+			.bulleT .marker.s0 { fill-opacity:0; stroke: #999999; stroke-width: 2px; }
+			.bulleT .marker.s1 { fill-opacity:0; stroke: #000; stroke-width: 2px; }
+			.bulleT .tick line { stroke: #666; stroke-width: .5px; }
+
+			.bulleT .range.s0 { fill: #005C7A; }
+			.bulleT .range.s1 { fill: #29A3CC; }
+			.bulleT .range.s2 { fill: #c6dbef; }
+			.bulleT .range.s3 { fill: #29A3CC; } 
+			.bulleT .range.s4 { fill: #005C7A; }
+
+			.bulleT .measure.s0 { fill: #4D4D4D; }
+			.bulleT .measure.s1 { fill: #999999; } 
+			.bulleT .measure.s2 { fill: #eeeeee; }
+			.bulleT .measure.s3 { fill: #999999; }
+			.bulleT .measure.s4 { fill: #4D4D4D; }
+
+			.bulleT .title { font-size: 12px; font-weight: bold; }
+			.bulleT .subtitle.s04 { fill: #000000; font-size: 16px; font-weight: bold;} 
+			.bulleT .subtitle.s13 { fill: #999999; font-size: 12px; font-weight: bold;}
+			.bulleT .subtitle.s2  { fill: #999999; font-size: 10px;}
+			</style>
+			<script src="http://d3js.org/d3.v3.min.js"></script>
+			<script>
+				(function() {
+				// Simple modification based on mbostock's Bullet Charts.
+				d3.bulleT = function() {
+				  var orient = "left",
+				      reverse = false,
+				      vertical = false,
+				      terjedelem = bulleTTerjedelem,
+				      ranges = bulleTRanges,
+				      markers = bulleTMarkers,
+				      measures = bulleTMeasures,
+				      width = 380,
+				      height = 30,
+				      tickFormat = null;
+
+				  // For each small multiple¡­
+				  function bulleT(g) {
+				    g.each(function(d, i) {
+				      var terjedelemz = terjedelem.call(this, d, i),
+				          rangez = ranges.call(this, d, i).slice().sort(d3.descending),
+				          markerz = markers.call(this, d, i),
+				          measurez = measures.call(this, d, i).slice().sort(d3.descending),
+				          g = d3.select(this);
+
+				      var wrap = g.select("g.wrap");
+				      
+				      if (wrap.empty()) wrap = g.append("g").attr("class", "wrap");
+				      // Compute the x-scale.
+				      var x0 = d3.scale.linear()
+				          .domain([terjedelemz[0], terjedelemz[1]])
+				          .range(reverse ? [width, terjedelemz[0]] : [terjedelemz[0], width]);
+
+				      // Stash the new scale.
+				      this.__chart__ = x0;
+
+				      // Derive width-scales from the x-scales.
+				      var w = bulleTWidth(x0,terjedelemz[0]);
+
+				      // Update the range rects.
+				      rangez.unshift(terjedelemz[1]);
+				      var range = wrap.selectAll("rect.range")
+				          .data(rangez);
+				      range.enter().append("rect")
+				          .filter( function(d, i){ if(i != 3){ return d} })
+				          .attr("class", function(d, i) { return "range s" + i; })
+				          .attr("width", w)
+				          .attr("y", 0)
+				          .attr("height",height)
+				          .attr("x", reverse ? x0 : terjedelemz[0]);
+				      range.enter().append("line")
+				          .filter( function(d, i){ if(i == 3){ return d} })
+				          .attr("class", "marker")
+				          .attr("x1", x0)
+				          .attr("x2", x0)
+				          .attr("y1", 0)
+				          .attr("y2", height);
+				      
+				      // Append the measure rects.
+				      measurez.unshift(terjedelemz[1]);
+				      var measure = wrap.selectAll("rect.measure")
+				          .data(measurez);
+				      measure.enter().append("rect")
+				          .attr("class", function(d, i) { return "measure s" + i; })
+				          .attr("width", w)
+				          .attr("height", height / 2)
+				          .attr("x", reverse ? x0 : terjedelemz[0])
+				          .attr("y", height / 4);
+				      // Append rect and line marker.    
+				      var marker = wrap.selectAll("rect.marker")
+				          .data(markerz);
+				      marker.enter().append("rect")
+				          .filter( function(d, i){ if(i == 1){ return d} })
+				          .attr("class", "marker s1")
+				          .attr("width", 6)
+				          .attr("y", -(height/10))
+				          .attr("height",function(d) {return height+(height/5);})
+				          .attr("x", x0)
+				          .attr("transform", "translate(-3,0)");
+				      marker.enter().append("line")
+				          .filter( function(d, i){ if(i == 0){ return d} })
+				          .attr("class", "marker s0")
+				          .attr("x1", x0)
+				          .attr("x2", x0)
+				          .attr("y1", height / 4)
+				          .attr("y2", height-(height / 4) );
+				               
+				      // Compute the tick format.
+				      var format = tickFormat || x0.tickFormat(8);
+
+				      // Update the tick groups.
+				      var tick = g.selectAll("tick")
+				          .data(x0.ticks(8), function(d) {
+				            return this.textContent || format(d);
+				          });
+
+				      // Initialize the ticks with the old scale, x0.
+				      var tickEnter = tick.enter().append("g")
+				          .attr("class", "tick")
+				          .attr("transform", bulleTTranslate(x0))
+				          .style("opacity", 1);
+
+				      tickEnter.append("line")
+				          .attr("y1", height)
+				          .attr("y2", height * 7 / 6);
+
+				      tickEnter.append("text")
+				          .attr("text-anchor", "middle")
+				          .attr("transform", function(d){
+				            if (vertical) {
+				              return "rotate(90)";
+				            }
+				          })
+				          .attr("dy",  function(d){
+				            if(vertical){return width/60; }else{ return height+15 }
+				          })
+				          .attr("dx",  function(d){
+				            if(vertical){return height+15 ;}
+				          })
+				          .text(format);
+				    });
+				  }
+
+				  // left, right, top, bottom
+				  bulleT.orient = function(x) {
+				    if (!arguments.length) return orient;
+				    orient = x;
+				    reverse = orient == "right" || orient == "bottom";
+				    return bulleT;
+				  }; 
+
+				  // terjedelem
+				  bulleT.terjedelem = function(x) {
+				    if (!arguments.length) return terjedelem;
+				    terjedelem = x;
+				    return bulleT;
+				  };
+
+				  // ranges (bad, satisfactory, good)
+				  bulleT.ranges = function(x) {
+				    if (!arguments.length) return ranges;
+				    ranges = x;
+				    return bulleT;
+				  };
+				//*
+				  // markers (previous, goal)
+				  bulleT.markers = function(x) {
+				    if (!arguments.length) return markers;
+				    markers = x;
+				    return bulleT;
+				  };
+
+				  // measures (actual, forecast)
+				  bulleT.measures = function(x) {
+				    if (!arguments.length) return measures;
+				    measures = x;
+				    return bulleT;
+				  };
+				//*/
+				  bulleT.vertical = function(x) {
+				    if (!arguments.length) return vertical;
+				    vertical = x;
+				    return bulleT;
+				  };
+				  bulleT.width = function(x) {
+				    if (!arguments.length) return width;
+				    width = x;
+				    return bulleT;
+				  };
+
+				  bulleT.height = function(x) {
+				    if (!arguments.length) return height;
+				    height = x;
+				    return bulleT;
+				  };
+
+				  bulleT.tickFormat = function(x) {
+				    if (!arguments.length) return tickFormat;
+				    tickFormat = x;
+				    return bulleT;
+				  };
+				  return bulleT;
+				};
+
+				function bulleTTerjedelem(d) {
+				  return d.terjedelem;
+				}
+
+				function bulleTRanges(d) {
+				  return d.ranges;
+				}
+
+				function bulleTMarkers(d) {
+				  return d.markers;
+				}
+
+				function bulleTMeasures(d) {
+				  return d.measures;
+				}
+
+				function bulleTTranslate(x) {
+				  return function(d) {
+				    return "translate(" + x(d) + ",0)";
+				  };
+				}
+				  
+				function bulleTWidth(x,y) {
+				  var x0 = x(0);
+				  return function(d) {
+				    return Math.abs(x(d-y) - x0);
+				  };
+				}
+
+				})();
+			</script>
+
+			<script>
+			// just for now and simplicity
+			var T1 = 10; 
+			var T2 = 80;
+			var T3 = 10; 
+			var T4 = 5;
+			var T5 = 60;
+			var T6 = 1;
+			// terjedelem is the hungarian translation of the statistical term of range
+			var data = [
+			  {"title":"A1","terjedelem":[0,100],"ranges":[70],"measures":[T1],"markers":[0,T1]},
+			  {"title":"A2","terjedelem":[0,100],"ranges":[70],"measures":[T2],"markers":[0,T2]},
+			  {"title":"A3","terjedelem":[0,100],"ranges":[70],"measures":[T3],"markers":[0,T3]},
+			  {"title":"A4","terjedelem":[0,100],"ranges":[70],"measures":[T4],"markers":[0,T4]},
+			  {"title":"A5","terjedelem":[0,100],"ranges":[70],"measures":[T5],"markers":[0,T5]},
+			  {"title":"A6","terjedelem":[0,100],"ranges":[70],"measures":[T6],"markers":[0,T6]}
+			]
+			var Width = 500, Height = 90;
+
+			var margin = {top: 1, right: 5, bottom: 50, left: 100},
+			    width = Width - margin.left - margin.right,
+			    height = Height - margin.top - margin.bottom;
+			    
+			var chart = d3.bulleT()
+			    .width(width)
+			    .height(height);
+			    
+			function bulleT(whichData,whereToPut,direction) {
+			  var a=window.Width, b=window.Height;
+			  if( direction == "vertical"){
+			    Height=a;Width=b+10;
+			    vertical = true;
+			  }else{
+			    Height=a;Width=b;
+			    vertical = false;
+			  }
+			   
+			  var svg = d3.select(whereToPut).selectAll("svg")
+			      .data(whichData)
+			    .enter().append("svg")
+			      .attr("class", "bulleT")
+			      .attr("width", Width)
+			      .attr("height", Height)
+			    .append("g")
+			      .attr("transform", function(){
+			        if( direction == "vertical"){
+			          return "rotate(-90)translate("+ -(Height-margin.left) +",10)";
+			        }else{
+			          return "translate("+ margin.left +","+ margin.top +")";
+			        }
+			      })
+			      .call(chart.vertical(vertical));
+
+			  var title = svg.append("g")
+			      .style("text-anchor", function(){
+			        if( direction == "vertical"){
+			          return "middle";
+			        }else{
+			          return "end";
+			        }
+			      })
+			      .attr("transform", function(){
+			        if( direction == "vertical"){
+			          return "rotate(90)translate("+ Width/4 +",10)";
+			        }else{
+			          return "translate(0," + height / 3 + ")";
+			        }
+			      });
+
+			  title.append("text")
+			      .attr("class", "title")
+			      .text(function(d) { return d.title; });
+
+			  title.append("text")
+			      .attr("dy", "1.2em")
+			      .text(function(d) { return d.dimension; })
+
+			  title.append("text")
+			      .attr("class",function(d) {
+			          switch (true)
+			          {
+			            case ( (d.markers[1] < 30) || (70 < d.markers[1]) ): 
+			              return "subtitle s04";
+			              break;
+			              break;
+			            case ( (30 <= d.markers[1]) && (d.markers[1] < 40) ):
+			              return "subtitle s13";
+			              break;
+			            case ( (40 <= d.markers[1]) && (d.markers[1] <= 60) ):
+			              return "subtitle s2";
+			              break;
+			            case ( (60 < d.markers[1]) && (d.markers[1] <= 70) ):
+			              return "subtitle s13";
+			              break;
+			          }
+			        }
+			      )
+			      .attr("dy", "2.4em")
+			      .text(function(d) { return d.subtitle; });
+			 
+			};
+			
+
+			</script>
+      
+</head>
+<body onload="setTimeout('document.location.reload();',300000)">
+<div class="container">
+	<div class="row clearfix">
+		<div class="col-md-12 column">
+			<nav class="navbar navbar-default" role="navigation">
+				<div class="navbar-header">
+					 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"> <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button> <a class="navbar-brand" href="/request">Logo</a>
+				</div>
+				
+				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+					<ul class="nav navbar-nav">
+						<li>
+							 <a href="/analysis">Records</a>
+						</li>
+						<li class="active">
+							 <a href="/analysis_shelf">Shelf</a><!--for store (On sales)-->
+						</li>
+						<li >
+							 <a href="/analysis_books">Books</a><!--key word,Top10 bar chat for purchase(No this books) -->
+						</li>
+						<li>
+							 <a href="/analysis_author">Author</a><!--for purchase(No this books)-->
+						</li>
+						<li>
+							 <a href="/analysis_classification">Classification</a><!--for purchase(No this books)-->
+						</li>
+						<li>
+							 <a>Download</a>
+						</li>
+						
+					</ul>
+					
+					<ul class="nav navbar-nav navbar-right">
+						<li class="active">
+							 <a href="/query">Query</a>
+						</li>
+						
+					</ul>
+				</div>
+				
+			</nav>
+			<div class="row clearfix">
+				
+				<div class="col-md-12 column" id="shelfForm">
+					
+					<table>
+					  <h1 align="center">Shelves</h1>
+					  <tr>
+					    <td>
+					      <div id="BulleT_vertical"></div>
+					    </td>
+					  </tr>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">bulleT(data,"#BulleT_vertical","vertical");</script>
+
+</body>
+</html>

@@ -1,0 +1,13 @@
+[
+{"RecordId":"1","BookId":"45921763","BookName":"A companion to American indie film","Publisher":"Xinhua","Author":"Karen","Classificaiton":"Film","StoreName":"1","SaleStatus":"4"},
+{"RecordId":"2","BookId":"51442190","BookName":"Macbeth","Publisher":"Xinhua","Author":"Shakespeare","Classificaiton":"literature","StoreName":"2","Shelf":"C1","SaleStatus":"2"},
+{"RecordId":"3","BookId":"95432780","BookName":"King Lear","Publisher":"Xinhua","Author":"Shakespeare","Classificaiton":"literature","StoreName":"3","Shelf":"A2","SaleStatus":"1"},
+{"RecordId":"4","BookId":"10000001","BookName":"Romeo and Juliet","Publisher":"Xinhua","Author":"Shakespeare","Classificaiton":"literature","StoreName":"1","Shelf":"D3","SaleStatus":"1"},
+{"RecordId":"5","BookId":"35793516","BookName":"Hamlet","Publisher":"Xinhua","Author":"Shakespeare","Classificaiton":"literature","StoreName":"1","Shelf":"C4","SaleStatus":"3"},
+{"RecordId":"6","BookId":"15479376","BookName":"Othello","Publisher":"Xinhua","Author":"Shakespeare","Classificaiton":"literature","StoreName":"4","Shelf":"B5","SaleStatus":"2"},
+{"RecordId":"7","BookId":"15479376","BookName":"Othello","Publisher":"Xinhua","Author":"Shakespeare","Classificaiton":"literature","StoreName":"2","Shelf":"A2","SaleStatus":"2"},
+{"RecordId":"8","BookId":"15479376","BookName":"Othello","Publisher":"Xinhua","Author":"Shakespeare","Classificaiton":"literature","StoreName":"3","Shelf":"C2","SaleStatus":"2"},
+{"RecordId":"9","BookId":"15479376","BookName":"Othello","Publisher":"Xinhua","Author":"Shakespeare","Classificaiton":"literature","StoreName":"2","Shelf":"D2","SaleStatus":"2"},
+{"RecordId":"10","BookId":"15479376","BookName":"Othello","Publisher":"Xinhua","Author":"Shakespeare","Classificaiton":"literature","StoreName":"1","Shelf":"A1","SaleStatus":"2"},
+
+]

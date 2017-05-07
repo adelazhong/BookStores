@@ -1,0 +1,79 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'C:\\Program Files\\nodejs\\node.exe',
+1 verbose cli   'C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js',
+1 verbose cli   'install',
+1 verbose cli   'node-csv',
+1 verbose cli   '--save' ]
+2 info using npm@2.15.9
+3 info using node@v4.6.0
+4 verbose install initial load of F:\TW1\package.json
+5 warn package.json node-authentication@ No description
+6 warn package.json node-authentication@ No repository field.
+7 warn package.json node-authentication@ No license field.
+8 verbose installManyTop reading scoped package data from F:\TW1\node_modules\bcrypt-nodejs\package.json
+9 verbose installManyTop reading scoped package data from F:\TW1\node_modules\body-parser\package.json
+10 verbose installManyTop reading scoped package data from F:\TW1\node_modules\connect-flash\package.json
+11 verbose installManyTop reading scoped package data from F:\TW1\node_modules\cookie-parser\package.json
+12 verbose installManyTop reading scoped package data from F:\TW1\node_modules\ejs\package.json
+13 verbose installManyTop reading scoped package data from F:\TW1\node_modules\express\package.json
+14 verbose installManyTop reading scoped package data from F:\TW1\node_modules\express-session\package.json
+15 verbose installManyTop reading scoped package data from F:\TW1\node_modules\morgan\package.json
+16 verbose installManyTop reading scoped package data from F:\TW1\node_modules\mysql\package.json
+17 verbose installManyTop reading scoped package data from F:\TW1\node_modules\passport\package.json
+18 verbose installManyTop reading scoped package data from F:\TW1\node_modules\passport-local\package.json
+19 info package.json connect-flash@0.1.1 No license field.
+20 info package.json passport-local@1.0.0 No license field.
+21 info package.json bcrypt-nodejs@0.0.3 No license field.
+22 verbose readDependencies loading dependencies from F:\TW1\package.json
+23 silly cache add args [ 'node-csv', null ]
+24 verbose cache add spec node-csv
+25 silly cache add parsed spec Result {
+25 silly cache add   raw: 'node-csv',
+25 silly cache add   scope: null,
+25 silly cache add   name: 'node-csv',
+25 silly cache add   rawSpec: '',
+25 silly cache add   spec: 'latest',
+25 silly cache add   type: 'tag' }
+26 silly addNamed node-csv@latest
+27 verbose addNamed "latest" is being treated as a dist-tag for node-csv
+28 info addNameTag [ 'node-csv', 'latest' ]
+29 silly mapToRegistry name node-csv
+30 silly mapToRegistry using default registry
+31 silly mapToRegistry registry https://registry.npmjs.org/
+32 silly mapToRegistry data Result {
+32 silly mapToRegistry   raw: 'node-csv',
+32 silly mapToRegistry   scope: null,
+32 silly mapToRegistry   name: 'node-csv',
+32 silly mapToRegistry   rawSpec: '',
+32 silly mapToRegistry   spec: 'latest',
+32 silly mapToRegistry   type: 'tag' }
+33 silly mapToRegistry uri https://registry.npmjs.org/node-csv
+34 verbose addNameTag registry:https://registry.npmjs.org/node-csv not in flight; fetching
+35 verbose request uri https://registry.npmjs.org/node-csv
+36 verbose request no auth needed
+37 info attempt registry request try #1 at 22:21:51
+38 verbose request id 89e73d17faa0193c
+39 http request GET https://registry.npmjs.org/node-csv
+40 info retry will retry, error on last attempt: Error: self signed certificate
+41 info attempt registry request try #2 at 22:22:01
+42 http request GET https://registry.npmjs.org/node-csv
+43 info retry will retry, error on last attempt: Error: self signed certificate
+44 info attempt registry request try #3 at 22:23:01
+45 http request GET https://registry.npmjs.org/node-csv
+46 verbose stack Error: self signed certificate
+46 verbose stack     at Error (native)
+46 verbose stack     at TLSSocket.<anonymous> (_tls_wrap.js:1022:38)
+46 verbose stack     at emitNone (events.js:67:13)
+46 verbose stack     at TLSSocket.emit (events.js:166:7)
+46 verbose stack     at TLSSocket._init.ssl.onclienthello.ssl.oncertcb.TLSSocket._finishInit (_tls_wrap.js:586:8)
+46 verbose stack     at TLSWrap.ssl.onclienthello.ssl.oncertcb.ssl.onnewsession.ssl.onhandshakedone (_tls_wrap.js:428:38)
+47 verbose cwd F:\TW1
+48 error Windows_NT 6.3.9600
+49 error argv "C:\\Program Files\\nodejs\\node.exe" "C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js" "install" "node-csv" "--save"
+50 error node v4.6.0
+51 error npm  v2.15.9
+52 error code DEPTH_ZERO_SELF_SIGNED_CERT
+53 error self signed certificate
+54 error If you need help, you may report this error at:
+54 error     <https://github.com/npm/npm/issues>
+55 verbose exit [ 1, true ]

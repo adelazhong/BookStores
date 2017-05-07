@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Analysis</title>
+		<script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script> 
+        <!-- 包括所有bootstrap的js插件或者可以根据需要使用的js插件调用　-->
+        <link href="http://cdn.bootcss.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">  
+		<script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+		<script src="http://d3js.org/d3.v3.min.js"></script>
+		<!--<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>-->
+		<script type="text/javascript" src="http://mbostock.github.com/d3/d3.js?2.6.0"></script>
+		<script type="text/javascript" src="http://mbostock.github.com/d3/d3.layout.js?2.6.0"></script>
+		<script type="text/javascript" src="http://mbostock.github.com/d3/d3.geom.js?2.6.0"></script>
+		
+        <style>
+
+        .axis .domain {
+          display: none;
+        }
+
+        </style>
+         <script type="text/javascript">
+			var data=[
+				{"RecordId":"1","BookId":"45921763","BookName":"A companion to American indie film","Publisher":"Xinhua","Author":"Karen","Classificaiton":"Film","StoreName":"SongYan","SaleStatus":"No this Book"},
+				{"RecordId":"2","BookId":"51442190","BookName":"Macbeth","Publisher":"Xinhua","Author":"Shakespeare","Classificaiton":"literature","StoreName":"SongYan","Shelf":"C1","SaleStatus":"Replenishment"},
+				{"RecordId":"3","BookId":"95432780","BookName":"King Lear","Publisher":"Xinhua","Author":"Shakespeare","Classificaiton":"literature","StoreName":"SongYan","Shelf":"A2","SaleStatus":"On Sales"},
+				{"RecordId":"4","BookId":"10000001","BookName":"Romeo and Juliet","Publisher":"Xinhua","Author":"Shakespeare","Classificaiton":"literature","StoreName":"SongYan","Shelf":"D3","SaleStatus":"On Sales"},
+				{"RecordId":"5","BookId":"35793516","BookName":"Hamlet","Publisher":"Xinhua","Author":"Shakespeare","Classificaiton":"literature","StoreName":"SongYan","Shelf":"C4","SaleStatus":"Reservation"},
+				{"RecordId":"6","BookId":"15479376","BookName":"Othello","Publisher":"Xinhua","Author":"Shakespeare","Classificaiton":"literature","StoreName":"SongYan","Shelf":"B5","SaleStatus":"Replenishment"},
+				{"RecordId":"7","BookId":"15479376","BookName":"Othello","Publisher":"Xinhua","Author":"Shakespeare","Classificaiton":"literature","StoreName":"SongYan","Shelf":"A2","SaleStatus":"Replenishment"},
+				{"RecordId":"8","BookId":"15479376","BookName":"Othello","Publisher":"Xinhua","Author":"Shakespeare","Classificaiton":"literature","StoreName":"SongYan","Shelf":"C2","SaleStatus":"Replenishment"},
+				{"RecordId":"9","BookId":"15479376","BookName":"Othello","Publisher":"Xinhua","Author":"Shakespeare","Classificaiton":"literature","StoreName":"SongYan","Shelf":"D2","SaleStatus":"Replenishment"},
+				{"RecordId":"10","BookId":"15479376","BookName":"Othello","Publisher":"Xinhua","Author":"Shakespeare","Classificaiton":"literature","StoreName":"SongYan","Shelf":"A1","SaleStatus":"Replenishment"}
+
+			];
+			var statusNum=["On Sales","Replenishment","Reservation","No this Book"];
+
+			onload = function(){
+			var body=document.getElementById('RecordForm');
+			body.appendChild(createTable(data));
+			};
+
+			var createTable = function(data){
+
+
+			var table=document.createElement('table');
+			table.setAttribute("class","table table-hover");
+			
+			var thead=document.createElement('thead');
+			table.appendChild(thead);
+			thead.appendChild(createTh('Book ID','Book name','Publisher','Author','Classificaiton','Store name','Bookshelf','Stock'));
+			
+			
+			var tbody=document.createElement('tbody');
+			table.appendChild(tbody);
+			for(var i=0;i<data.length;i++){
+				var  status = document.getElementById("searchStatus").value; 
+				if (status == 0) tbody.appendChild(createTr(data[i].BookId,data[i].BookName,data[i].Publisher,data[i].Author,data[i].Classificaiton,data[i].StoreName,data[i].Shelf,data[i].SaleStatus));
+				if (statusNum[status-1] == data[i].SaleStatus) 
+					tbody.appendChild(createTr(data[i].BookId,data[i].BookName,data[i].Publisher,data[i].Author,data[i].Classificaiton,data[i].StoreName,data[i].Shelf,data[i].SaleStatus));
+			}
+			return table;
+			};
+
+
+			
+			var createTr = function(t1,t2,t3,t4,t5,t6,t7,t8){
+			var tr=document.createElement('tr');
+			var td1=document.createElement('td');
+			td1.innerHTML = t1;
+			var td2 = document.createElement('td');
+			td2.innerHTML = t2;
+			var td3 = document.createElement('td');
+			td3.innerHTML = t3;
+			var td4=document.createElement('td')
+			td4.innerHTML = t4;
+			var td5 = document.createElement('td');
+			td5.innerHTML = t5;
+			var td6 = document.createElement('td');
+			td6.innerHTML = t6;
+			var td7 = document.createElement('td');
+			td7.innerHTML = t7;
+			var td8 = document.createElement('td');
+			td8.innerHTML = t8;
+			tr.appendChild(td1);
+			tr.appendChild(td2);
+			tr.appendChild(td3);
+			tr.appendChild(td4);
+			tr.appendChild(td5);
+			tr.appendChild(td6);
+			tr.appendChild(td7);
+			tr.appendChild(td8);
+			return tr;
+			};
+
+			var createTh = function(t1,t2,t3,t4,t5,t6,t7,t8){
+			var th=document.createElement('tr');
+			var td1=document.createElement('th');
+			td1.innerHTML = t1;
+			var td2 = document.createElement('th');
+			td2.innerHTML = t2;
+			var td3 = document.createElement('th');
+			td3.innerHTML = t3;
+			var td4=document.createElement('th')
+			td4.innerHTML = t4;
+			var td5 = document.createElement('th');
+			td5.innerHTML = t5;
+			var td6 = document.createElement('th');
+			td6.innerHTML = t6;
+			var td7 = document.createElement('th');
+			td7.innerHTML = t7;
+			var td8 = document.createElement('th');
+			td8.innerHTML = t8;
+			th.appendChild(td1);
+			th.appendChild(td2);
+			th.appendChild(td3);
+			th.appendChild(td4);
+			th.appendChild(td5);
+			th.appendChild(td6);
+			th.appendChild(td7);
+			th.appendChild(td8);
+			return th;
+			};
+
+
+			</script>
+
+      
+</head>
+<body>
+<div class="container">
+	<div class="row clearfix">
+		<div class="col-md-12 column">
+			<nav class="navbar navbar-default" role="navigation">
+				<div class="navbar-header">
+					 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"> <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button> <a class="navbar-brand" href="/request">Logo</a>
+				</div>
+				
+				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+					<ul class="nav navbar-nav">
+						<li>
+							 <a href="/analysis">Records</a>
+						</li>
+						<li>
+							 <a href="/analysis_shelf">Shelf</a><!--for store (On sales)-->
+						</li>
+						<li  class="active">
+							 <a href="/analysis_books">Books</a><!--bubble chat & Top10 for purchase(No this books) -->
+						</li>
+						<li>
+							 <a href="/analysis_author">Author</a><!---bubble chat & clendarfor purchase(No this books)-->
+						</li>
+						<li>
+							 <a href="/analysis_classification">Classification</a><!--for purchase(No this books)-->
+						</li>
+						<li>
+							 <a>Download</a>
+						</li>
+						
+					</ul>
+					
+					<ul class="nav navbar-nav navbar-right">
+						<li class="active">
+							 <a href="/query">Query</a>
+						</li>
+						
+					</ul>
+				</div>
+				
+			</nav>
+			<div class="col-md-6 column" id="RecordForm">
+				<table class="table table-hover">
+				<thead>
+					<h2>Hot query Book(no this book in store)</h2> 
+					<tr>
+						<th>
+							Book name
+						</th>
+						<th>
+							Number
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr class="success">
+						<td>
+							A Brief History of Time 
+						</td>
+						<td>
+							17
+						</td>
+
+					</tr>
+					<tr class="success">
+						<td>
+							The Universe in a Nutshell 
+						</td>
+						<td>
+							3
+						</td>
+
+					</tr>
+					<tr class="success">
+						<td>
+							Shortest History of Europe 
+						</td>
+						<td>
+							3
+						</td>
+
+					</tr>
+					<tr class="success">
+						<td>
+							A Brief History of Space 
+						</td>
+						<td>
+							1
+						</td>
+
+					</tr>
+					<tr class="success">
+						<td>
+							A Brief History of Humankind
+						</td>
+						<td>
+							1
+						</td>
+
+					</tr>
+					
+				</tbody>
+			</table>
+			</div>
+			<div class="row clearfix">
+				
+				<div class="col-md-6 column" id="pic">
+					<script type="text/javascript" charset="utf-8">
+						var data=["Brief","History","Space","Time","Universe","Nutshell","Humankind","Europe","Shortest"];
+
+								var w = 500, h = 300;
+
+								var labelDistance = 0;
+
+								var vis = d3.select("#pic").append("svg:svg").attr("width", w).attr("height", h);
+
+								var nodes = [];
+								var labelAnchors = [];
+								var labelAnchorLinks = [];
+								var links = [];
+
+								for(var i = 0; i < 9; i++) {
+									var node = {
+										label : data[i]
+									};
+									nodes.push(node);
+									labelAnchors.push({
+										node : node
+									});
+									labelAnchors.push({
+										node : node
+									});
+								};
+
+								links.push({
+									source:0,
+									target:1,
+									weight:2
+								});
+								links.push({
+									source:0,
+									target:2,
+									weight:1
+								});
+								links.push({
+									source:0,
+									target:3,
+									weight:1
+								});
+								links.push({
+									source:1,
+									target:2,
+									weight:1
+								});
+								links.push({
+									source:1,
+									target:3,
+									weight:1
+								});
+								links.push({
+									source:1,
+									target:6,
+									weight:1
+								});
+								links.push({
+									source:1,
+									target:7,
+									weight:1
+								});
+								links.push({
+									source:1,
+									target:8,
+									weight:1
+								});
+								links.push({
+									source:4,
+									target:5,
+									weight:1
+								});
+								links.push({
+									source:7,
+									target:8,
+									weight:1
+								});
+								for(var i = 0; i < nodes.length; i++) {
+									/*for(var j = 0; j < i; j++) {
+										if(Math.random() > .95)
+											links.push({
+												source : i,
+												target : j,
+												weight : Math.random()
+											});
+									}*/
+									labelAnchorLinks.push({
+										source : i * 2,
+										target : i * 2 + 1,
+										weight : 1
+									});
+								};
+
+								var force = d3.layout.force().size([w, h]).nodes(nodes).links(links).gravity(1).linkDistance(50).charge(-3000).linkStrength(function(x) {
+									return x.weight * 10
+								});
+
+
+								force.start();
+
+								var force2 = d3.layout.force().nodes(labelAnchors).links(labelAnchorLinks).gravity(0).linkDistance(0).linkStrength(8).charge(-100).size([w, h]);
+								force2.start();
+
+								var link = vis.selectAll("line.link").data(links).enter().append("svg:line").attr("class", "link").style("stroke", "#CCC");
+
+								var node = vis.selectAll("g.node").data(force.nodes()).enter().append("svg:g").attr("class", "node");
+								node.append("svg:circle").attr("r", 5).style("fill", "#555").style("stroke", "#FFF").style("stroke-width", 3);
+								node.call(force.drag);
+
+
+								var anchorLink = vis.selectAll("line.anchorLink").data(labelAnchorLinks)//.enter().append("svg:line").attr("class", "anchorLink").style("stroke", "#999");
+
+								var anchorNode = vis.selectAll("g.anchorNode").data(force2.nodes()).enter().append("svg:g").attr("class", "anchorNode");
+								anchorNode.append("svg:circle").attr("r", 0).style("fill", "#FFF");
+									anchorNode.append("svg:text").text(function(d, i) {
+									return i % 2 == 0 ? "" : d.node.label
+								}).style("fill", "#555").style("font-family", "Arial").style("font-size", 12);
+
+								var updateLink = function() {
+									this.attr("x1", function(d) {
+										return d.source.x;
+									}).attr("y1", function(d) {
+										return d.source.y;
+									}).attr("x2", function(d) {
+										return d.target.x;
+									}).attr("y2", function(d) {
+										return d.target.y;
+									});
+
+								}
+
+								var updateNode = function() {
+									this.attr("transform", function(d) {
+										return "translate(" + d.x + "," + d.y + ")";
+									});
+
+								}
+
+
+								force.on("tick", function() {
+
+									force2.start();
+
+									node.call(updateNode);
+
+									anchorNode.each(function(d, i) {
+										if(i % 2 == 0) {
+											d.x = d.node.x;
+											d.y = d.node.y;
+										} else {
+											var b = this.childNodes[1].getBBox();
+
+											var diffX = d.x - d.node.x;
+											var diffY = d.y - d.node.y;
+
+											var dist = Math.sqrt(diffX * diffX + diffY * diffY);
+
+											var shiftX = b.width * (diffX - dist) / (dist * 2);
+											shiftX = Math.max(-b.width, Math.min(0, shiftX));
+											var shiftY = 5;
+											this.childNodes[1].setAttribute("transform", "translate(" + shiftX + "," + shiftY + ")");
+										}
+									});
+
+
+									anchorNode.call(updateNode);
+
+									link.call(updateLink);
+									anchorLink.call(updateLink);
+
+								});
+
+							</script>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+</body>
+</html>
